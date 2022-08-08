@@ -17,7 +17,7 @@
       <input type="submit" value="Create" />
     </form>
     <div id="error" class="hidden">Something went wrong!</div>
-    <ul id="'todos">
+    <ul id="todos">
       {% for d in data %}
       <li>{{ d.description }}</li>
       {% endfor %}
@@ -44,7 +44,7 @@
             document.getElementById("todos").appendChild(liItem);
             document.getElementById("error").className = "hidden";
           })
-          .catch(function (params) {
+          .catch(function () {
             document.getElementById("error").className = "";
           });
       };
