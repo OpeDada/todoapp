@@ -38,6 +38,7 @@ def create_todo():
     else:
       return jsonify(body)
 
+@app
 
 @app.route('/')
 def index():
