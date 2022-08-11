@@ -20,7 +20,7 @@ class Todo(db.Model): #child model
   #db.Foreign key takes the table name of the parent dot the column name of the primary key
 
   def __repr__(self):
-    return f'<Todo {self.id} {self.description}>'
+    return f'<Todo {self.id} {self.description}, list {self.list_id}>'
 
 class TodoList(db.Model): #parent model
   __tablename__ = 'todolists'
@@ -32,6 +32,10 @@ class TodoList(db.Model): #parent model
   #Todo is a string referencing the name of a class,
   #backref equals to a custom name referencing the name of the parent.
 
+  def __repr__(self):
+    return f'<TodoList {self.id} {self.name}>'
+
+#CREATE todo
 @app.route('/todos/create', methods=['POST'])
 def create_todo():
   error = False
@@ -55,6 +59,7 @@ def create_todo():
     else:
       return jsonify(body)
 
+#SET COMPLETED todo
 @app.route('/todos/<todo_id>/set-completed', methods=['POST'])
 def set_completed_todo(todo_id):
   try:
@@ -69,6 +74,7 @@ def set_completed_todo(todo_id):
     db.session.close()
   return redirect(url_for('index'))
 
+#DELETE todo
 @app.route('/todos/<todo_id>', methods=['DELETE'])
 def delete_todo(todo_id):
   try:
