@@ -20,8 +20,7 @@ class Todo(db.Model): #child model
   #db.Foreign key takes the table name of the parent dot the column name of the primary key
 
   def __repr__(self):
-    return f'<Todo ID: {self.id}, description: {self.description}, complete: {self.completed}>'
-    # list {self.list_id}
+    return f'<Todo {self.id} {self.description}, list {self.list_id}>'
 
 class TodoList(db.Model): #parent model
   __tablename__ = 'todolists'
@@ -43,12 +42,14 @@ def create_todo():
   body = {}
   try:
     description = request.get_json()['description']
-    todo = Todo(description=description, completed=False)
+    list_id = request.get_json()['list_id']
+    todo = Todo(description=description, list_id=list_id,completed=False)
     db.session.add(todo)
     db.session.commit()
     body['id'] = todo.id
     body['completed'] = todo.completed
     body['description'] = todo.description
+    body['list_id'] = todo.list_id
   except:
     error = True
     db.session.rollback()
