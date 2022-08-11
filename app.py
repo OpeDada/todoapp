@@ -24,7 +24,7 @@ def create_todo():
   body = {}
   try:
     description = request.get_json()['description']
-    todo = Todo(description=description, completed=False )
+    todo = Todo(description=description, completed=False)
     db.session.add(todo)
     db.session.commit()
     body['id'] = todo.id
