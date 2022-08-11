@@ -9,14 +9,28 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-class Todo(db.Model):
+class Todo(db.Model): #child model
   __tablename__ = 'todos'
   id = db.Column(db.Integer, primary_key=True)
   description = db.Column(db.String(), nullable=False)
   completed = db.Column(db.Boolean, nullable=False, default=False)
+  #specify the foreign key on the child model
+  list_id = db.Column(db.Integer, db.ForeignKey('todolists.id'), nullable=False)
+  #list id references the id on the foreign table(parent)
+  #db.Foreign key takes the table name of the parent dot the column name of the primary key
 
   def __repr__(self):
     return f'<Todo {self.id} {self.description}>'
+
+class TodoList(db.Model): #parent model
+  __tablename__ = 'todolists'
+  id = db.Column(db.Integer, primary_key=True)
+  name = db.Column(db.String(), nullable=False)
+  #specify the relationship on the parent model
+  todos = db.relationship('Todo', backref='list', lazy=True)
+  #name of the children is todos
+  #Todo is a string referencing the name of a class,
+  #backref equals to a custom name referencing the name of the parent.
 
 @app.route('/todos/create', methods=['POST'])
 def create_todo():
