@@ -20,7 +20,8 @@ class Todo(db.Model): #child model
   #db.Foreign key takes the table name of the parent dot the column name of the primary key
 
   def __repr__(self):
-    return f'<Todo {self.id} {self.description}, list {self.list_id}>'
+    return f'<Todo ID: {self.id}, description: {self.description}, complete: {self.completed}>'
+    # list {self.list_id}
 
 class TodoList(db.Model): #parent model
   __tablename__ = 'todolists'
