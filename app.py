@@ -24,9 +24,11 @@ def create_todo():
   body = {}
   try:
     description = request.get_json()['description']
-    todo = Todo(description=description)
+    todo = Todo(description=description, completed=False )
     db.session.add(todo)
     db.session.commit()
+    body['id'] = todo.id
+    body['completed'] = todo.completed
     body['description'] = todo.description
   except:
     error = True
@@ -53,9 +55,20 @@ def set_completed_todo(todo_id):
     db.session.close()
   return redirect(url_for('index'))
 
+@app.route('/todos/<todo_id>', methods=['DELETE'])
+def delete_todo(todo_id):
+  try:
+    Todo.query.filter_by(id=todo_id).delete()
+    db.session.commit()
+  except:
+    db.session.rollback()
+  finally:
+    db.session.close()
+  return jsonify({ 'success': True })
+
 @app.route('/')
 def index():
-  return render_template('index.html', data=Todo.query.order_by('id').all())
+  return render_template('index.html', todos=Todo.query.order_by('id').all())
 
 
 if __name__ == '__main__':
